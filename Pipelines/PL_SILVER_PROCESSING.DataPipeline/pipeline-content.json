@@ -1,0 +1,151 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "sqlReaderQuery": "SELECT *\nFROM CTL.CTL_INTEGRATION_METADATA\nWHERE ACTIVE_FLG = 'Y'\nAND CDC_FLAG ='Y'\nORDER BY EXECUTION_ORDER;",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00"
+          },
+          "datasetSettings": {
+            "type": "DataWarehouseTable",
+            "schema": [],
+            "linkedService": {
+              "name": "WH_PHARMA",
+              "properties": {
+                "type": "DataWarehouse",
+                "typeProperties": {
+                  "artifactId": "c985e5b1-e4ce-b1ec-4c29-6e14a5b47622",
+                  "endpoint": "gpmxth5ok7tu5gsvuhyulctvgu-cmbwkftkhcruzde6746kfmcpnu.datawarehouse.fabric.microsoft.com",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "LKP_INTEGRATION_METADATA",
+        "dependsOn": []
+      },
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "isSequential": true,
+          "items": {
+            "value": "@activity('LKP_INTEGRATION_METADATA').output.value",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "72e51bb6-a312-8878-4762-4bb614ec847f",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "METADATA_ID": {
+                    "value": {
+                      "value": "@item().METADATA_ID",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "PIPELINE_RUN_ID": {
+                    "value": {
+                      "value": "@pipeline().RunId",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "NB_BRONZE_TO_SILVER",
+              "dependsOn": []
+            },
+            {
+              "type": "Script",
+              "typeProperties": {
+                "scripts": [
+                  {
+                    "text": {
+                      "value": "@{concat(\n'UPDATE CTL.CTL_INTEGRATION_METADATA\nSET\nLAST_EXECUTION_DATE = CURRENT_TIMESTAMP,\nSESSION_CDC_EXTRACT_DT = CURRENT_TIMESTAMP\nWHERE METADATA_ID = ',\nstring(item().METADATA_ID),\n';'\n)}",
+                      "type": "Expression"
+                    },
+                    "type": "NonQuery",
+                    "parameters": [
+                      {
+                        "name": "INTEGRATION_ID",
+                        "type": "Int64",
+                        "value": {
+                          "value": "@item().INTEGRATION_ID",
+                          "type": "Expression"
+                        },
+                        "direction": "Input"
+                      }
+                    ]
+                  }
+                ],
+                "scriptBlockExecutionTimeout": "02:00:00"
+              },
+              "linkedService": {
+                "name": "WH_PHARMA",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "c985e5b1-e4ce-b1ec-4c29-6e14a5b47622",
+                    "endpoint": "gpmxth5ok7tu5gsvuhyulctvgu-cmbwkftkhcruzde6746kfmcpnu.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "annotations": []
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "SCR_UPDATE_METADATA",
+              "dependsOn": [
+                {
+                  "activity": "NB_BRONZE_TO_SILVER",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "name": "FE_PROCESS_TABLES",
+        "dependsOn": [
+          {
+            "activity": "LKP_INTEGRATION_METADATA",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

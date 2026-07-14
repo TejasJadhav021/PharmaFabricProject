@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "PL_GOLD_TO_WAREHOUSE"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "db1aeacc-56d8-b918-4727-72bd6a4acb19"
+  }
+}

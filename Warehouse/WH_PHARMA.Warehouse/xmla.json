@@ -1,0 +1,669 @@
+{
+  "name": "{{Dataset_Name}}",
+  "compatibilityLevel": 1606,
+  "model": {
+    "name": "{{Dataset_Name}}",
+    "culture": "en-US",
+    "collation": "Latin1_General_100_BIN2_UTF8",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "CTL_INTEGRATION_METADATA",
+        "sourceLineageTag": "[CTL].[CTL_INTEGRATION_METADATA]",
+        "columns": [
+          {
+            "name": "INTEGRATION_SESSION_NAME",
+            "dataType": "string",
+            "sourceColumn": "INTEGRATION_SESSION_NAME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "INTEGRATION_SESSION_NAME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SOURCE_SYSTEM",
+            "dataType": "string",
+            "sourceColumn": "SOURCE_SYSTEM",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SOURCE_SYSTEM",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SOURCE_OBJECT",
+            "dataType": "string",
+            "sourceColumn": "SOURCE_OBJECT",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SOURCE_OBJECT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SOURCE_QUERY",
+            "dataType": "string",
+            "sourceColumn": "SOURCE_QUERY",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SOURCE_QUERY",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SOURCE_PATH",
+            "dataType": "string",
+            "sourceColumn": "SOURCE_PATH",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SOURCE_PATH",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TARGET_LAYER",
+            "dataType": "string",
+            "sourceColumn": "TARGET_LAYER",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TARGET_LAYER",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TARGET_FOLDER",
+            "dataType": "string",
+            "sourceColumn": "TARGET_FOLDER",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TARGET_FOLDER",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TARGET_FILE_NAME",
+            "dataType": "string",
+            "sourceColumn": "TARGET_FILE_NAME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TARGET_FILE_NAME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TARGET_TABLE",
+            "dataType": "string",
+            "sourceColumn": "TARGET_TABLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TARGET_TABLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FILE_FORMAT",
+            "dataType": "string",
+            "sourceColumn": "FILE_FORMAT",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "FILE_FORMAT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "LOAD_TYPE",
+            "dataType": "string",
+            "sourceColumn": "LOAD_TYPE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "LOAD_TYPE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PRIMARY_KEY_COLUMN",
+            "dataType": "string",
+            "sourceColumn": "PRIMARY_KEY_COLUMN",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PRIMARY_KEY_COLUMN",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "WATERMARK_COLUMN",
+            "dataType": "string",
+            "sourceColumn": "WATERMARK_COLUMN",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "WATERMARK_COLUMN",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "NOTEBOOK_NAME",
+            "dataType": "string",
+            "sourceColumn": "NOTEBOOK_NAME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "NOTEBOOK_NAME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PIPELINE_NAME",
+            "dataType": "string",
+            "sourceColumn": "PIPELINE_NAME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PIPELINE_NAME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "EXECUTION_ORDER",
+            "dataType": "int64",
+            "sourceColumn": "EXECUTION_ORDER",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "EXECUTION_ORDER",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ACTIVE_FLG",
+            "dataType": "string",
+            "sourceColumn": "ACTIVE_FLG",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "ACTIVE_FLG",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CREATED_BY",
+            "dataType": "string",
+            "sourceColumn": "CREATED_BY",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "CREATED_BY",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CREATED_DT",
+            "dataType": "dateTime",
+            "sourceColumn": "CREATED_DT",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "CREATED_DT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "UPDATED_BY",
+            "dataType": "string",
+            "sourceColumn": "UPDATED_BY",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "UPDATED_BY",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "UPDATED_DT",
+            "dataType": "dateTime",
+            "sourceColumn": "UPDATED_DT",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "UPDATED_DT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SOURCE_CONNECTION",
+            "dataType": "string",
+            "sourceColumn": "SOURCE_CONNECTION",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SOURCE_CONNECTION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "DESTINATION_CONNECTION",
+            "dataType": "string",
+            "sourceColumn": "DESTINATION_CONNECTION",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "DESTINATION_CONNECTION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "FILE_EXTENSION",
+            "dataType": "string",
+            "sourceColumn": "FILE_EXTENSION",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "FILE_EXTENSION",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TARGET_PATH",
+            "dataType": "string",
+            "sourceColumn": "TARGET_PATH",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TARGET_PATH",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CDC_FLAG",
+            "dataType": "string",
+            "sourceColumn": "CDC_FLAG",
+            "sourceProviderType": "char",
+            "sourceLineageTag": "CDC_FLAG",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "LAST_EXECUTION_DATE",
+            "dataType": "dateTime",
+            "sourceColumn": "LAST_EXECUTION_DATE",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "LAST_EXECUTION_DATE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SESSION_CDC_EXTRACT_DT",
+            "dataType": "dateTime",
+            "sourceColumn": "SESSION_CDC_EXTRACT_DT",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "SESSION_CDC_EXTRACT_DT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PRUNE_DAYS",
+            "dataType": "int64",
+            "sourceColumn": "PRUNE_DAYS",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PRUNE_DAYS",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "GOLD_TABLE",
+            "dataType": "string",
+            "sourceColumn": "GOLD_TABLE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "GOLD_TABLE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "TABLE_TYPE",
+            "dataType": "string",
+            "sourceColumn": "TABLE_TYPE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "TABLE_TYPE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SILVER_PATH",
+            "dataType": "string",
+            "sourceColumn": "SILVER_PATH",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SILVER_PATH",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "METADATA_ID",
+            "dataType": "int64",
+            "sourceColumn": "METADATA_ID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "METADATA_ID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "CTL_INTEGRATION_METADATA",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "CTL"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "name": "CTL_WATERMARK",
+        "sourceLineageTag": "[CTL].[CTL_WATERMARK]",
+        "columns": [
+          {
+            "name": "WATERMARK_ID",
+            "dataType": "int64",
+            "sourceColumn": "WATERMARK_ID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "WATERMARK_ID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "INTEGRATION_ID",
+            "dataType": "int64",
+            "sourceColumn": "INTEGRATION_ID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "INTEGRATION_ID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "INTEGRATION_SESSION_NAME",
+            "dataType": "string",
+            "sourceColumn": "INTEGRATION_SESSION_NAME",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "INTEGRATION_SESSION_NAME",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "LAST_WATERMARK_VALUE",
+            "dataType": "dateTime",
+            "sourceColumn": "LAST_WATERMARK_VALUE",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "LAST_WATERMARK_VALUE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CURRENT_WATERMARK_VALUE",
+            "dataType": "dateTime",
+            "sourceColumn": "CURRENT_WATERMARK_VALUE",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "CURRENT_WATERMARK_VALUE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "STATUS",
+            "dataType": "string",
+            "sourceColumn": "STATUS",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "STATUS",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "CREATED_DT",
+            "dataType": "dateTime",
+            "sourceColumn": "CREATED_DT",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "CREATED_DT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "UPDATED_DT",
+            "dataType": "dateTime",
+            "sourceColumn": "UPDATED_DT",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "UPDATED_DT",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "CTL_WATERMARK",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "CTL"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "DatabaseQuery",
+        "kind": "m",
+        "expression": "let\n    database = {{TDS_Endpoint}}\nin\n    database\n"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "0"
+      },
+      {
+        "name": "SourceLineageTagType",
+        "value": "DatabaseFullyQualifiedName"
+      }
+    ]
+  }
+}

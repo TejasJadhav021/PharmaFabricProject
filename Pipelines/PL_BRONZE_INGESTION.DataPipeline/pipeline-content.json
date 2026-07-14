@@ -1,0 +1,421 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "sqlReaderQuery": "SELECT *\nFROM CTL.CTL_INTEGRATION_METADATA\nWHERE ACTIVE_FLG='Y' \nAND CDC_FLAG='Y'\nORDER BY EXECUTION_ORDER;",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00"
+          },
+          "datasetSettings": {
+            "type": "DataWarehouseTable",
+            "schema": [],
+            "linkedService": {
+              "name": "WH_PHARMA",
+              "properties": {
+                "type": "DataWarehouse",
+                "typeProperties": {
+                  "artifactId": "c985e5b1-e4ce-b1ec-4c29-6e14a5b47622",
+                  "endpoint": "gpmxth5ok7tu5gsvuhyulctvgu-cmbwkftkhcruzde6746kfmcpnu.datawarehouse.fabric.microsoft.com",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "LKP_INTEGRATION_METADATA",
+        "description": "Reads active metadata records from CTL_INTEGRATION_METADATA.",
+        "dependsOn": []
+      },
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "isSequential": true,
+          "items": {
+            "value": "@activity('LKP_INTEGRATION_METADATA').output.value",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "Switch",
+              "typeProperties": {
+                "on": {
+                  "value": "@item().SOURCE_SYSTEM",
+                  "type": "Expression"
+                },
+                "cases": [
+                  {
+                    "value": "AzureSQL",
+                    "activities": [
+                      {
+                        "type": "Copy",
+                        "typeProperties": {
+                          "source": {
+                            "type": "AzureSqlSource",
+                            "sqlReaderQuery": {
+                              "value": "@if(\n    equals(item().CDC_FLAG,'Y'),\n    concat(\n        item().SOURCE_QUERY\n    ),\n    item().SOURCE_QUERY\n)",
+                              "type": "Expression"
+                            },
+                            "partitionOption": "None",
+                            "queryTimeout": "02:00:00",
+                            "datasetSettings": {
+                              "type": "AzureSqlTable",
+                              "typeProperties": {
+                                "database": "db_realestate_de"
+                              },
+                              "schema": [],
+                              "externalReferences": {
+                                "connection": "2f0187a3-1abf-45e2-83c7-921d45196fcb"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "sink": {
+                            "type": "ParquetSink",
+                            "formatSettings": {
+                              "type": "ParquetWriteSettings",
+                              "enableVertiParquet": true
+                            },
+                            "storeSettings": {
+                              "type": "AzureBlobStorageWriteSettings",
+                              "copyBehavior": "FlattenHierarchy"
+                            },
+                            "datasetSettings": {
+                              "type": "Parquet",
+                              "typeProperties": {
+                                "location": {
+                                  "type": "LakehouseLocation",
+                                  "folderPath": {
+                                    "value": "@concat(\nitem().TARGET_PATH,\n'/',\nformatDateTime(utcNow(),'yyyy'),\n'/',\nformatDateTime(utcNow(),'MM'),\n'/',\nformatDateTime(utcNow(),'dd')\n)",
+                                    "type": "Expression"
+                                  }
+                                },
+                                "compressionCodec": "snappy"
+                              },
+                              "schema": [],
+                              "linkedService": {
+                                "name": "LH_PHARMA",
+                                "properties": {
+                                  "type": "Lakehouse",
+                                  "typeProperties": {
+                                    "artifactId": "43f53674-f141-b910-4f7a-12397f3feb17",
+                                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                    "rootFolder": "Files"
+                                  },
+                                  "annotations": []
+                                }
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "translator": {
+                            "type": "TabularTranslator",
+                            "typeConversion": true,
+                            "typeConversionSettings": {
+                              "allowDataTruncation": true,
+                              "treatBooleanAsNumber": false
+                            }
+                          },
+                          "enableStaging": false,
+                          "enableSkipIncompatibleRow": true
+                        },
+                        "policy": {
+                          "timeout": "0.12:00:00",
+                          "retry": 0,
+                          "retryIntervalInSeconds": 30,
+                          "secureInput": false,
+                          "secureOutput": false
+                        },
+                        "name": "CPY_SQL_TO_BRONZE",
+                        "description": "Copies Azure SQL data into Bronze Lakehouse.",
+                        "dependsOn": []
+                      }
+                    ]
+                  },
+                  {
+                    "value": "SharePoint",
+                    "activities": [
+                      {
+                        "type": "Copy",
+                        "typeProperties": {
+                          "source": {
+                            "type": "DelimitedTextSource",
+                            "formatSettings": {
+                              "type": "DelimitedTextReadSettings"
+                            },
+                            "storeSettings": {
+                              "type": "StoreReadSettings",
+                              "recursive": true,
+                              "enablePartitionDiscovery": false
+                            },
+                            "datasetSettings": {
+                              "type": "DelimitedText",
+                              "typeProperties": {
+                                "location": {
+                                  "type": "DatasetLocation",
+                                  "folderPath": "Shared Documents/PharmaMasters/",
+                                  "fileName": {
+                                    "value": "@item().SOURCE_OBJECT",
+                                    "type": "Expression"
+                                  }
+                                },
+                                "columnDelimiter": ",",
+                                "quoteChar": "\"",
+                                "escapeChar": "\\",
+                                "firstRowAsHeader": true
+                              },
+                              "schema": [],
+                              "externalReferences": {
+                                "connection": "79b69907-1e12-41c8-acc0-1201e128eea8"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "sink": {
+                            "type": "ParquetSink",
+                            "formatSettings": {
+                              "type": "ParquetWriteSettings",
+                              "enableVertiParquet": true
+                            },
+                            "storeSettings": {
+                              "type": "AzureBlobStorageWriteSettings",
+                              "maxConcurrentConnections": 0,
+                              "copyBehavior": "MergeFiles"
+                            },
+                            "datasetSettings": {
+                              "type": "Parquet",
+                              "typeProperties": {
+                                "location": {
+                                  "type": "LakehouseLocation",
+                                  "folderPath": {
+                                    "value": "@concat(\nitem().TARGET_PATH,\n'/',\nformatDateTime(utcNow(),'yyyy'),\n'/',\nformatDateTime(utcNow(),'MM'),\n'/',\nformatDateTime(utcNow(),'dd')\n)",
+                                    "type": "Expression"
+                                  }
+                                },
+                                "compressionCodec": "snappy"
+                              },
+                              "schema": [],
+                              "linkedService": {
+                                "name": "LH_PHARMA",
+                                "properties": {
+                                  "type": "Lakehouse",
+                                  "typeProperties": {
+                                    "artifactId": "43f53674-f141-b910-4f7a-12397f3feb17",
+                                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                    "rootFolder": "Files"
+                                  },
+                                  "annotations": []
+                                }
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "translator": {
+                            "type": "TabularTranslator",
+                            "typeConversion": true,
+                            "typeConversionSettings": {
+                              "allowDataTruncation": true,
+                              "treatBooleanAsNumber": false
+                            }
+                          },
+                          "enableStaging": false
+                        },
+                        "policy": {
+                          "timeout": "0.12:00:00",
+                          "retry": 0,
+                          "retryIntervalInSeconds": 30,
+                          "secureInput": false,
+                          "secureOutput": false
+                        },
+                        "name": "CPY_SHAREPOINT_TO_BRONZE",
+                        "description": "Copies SharePoint Excel files into Bronze.",
+                        "dependsOn": []
+                      }
+                    ]
+                  },
+                  {
+                    "value": "GitHub",
+                    "activities": [
+                      {
+                        "type": "Copy",
+                        "typeProperties": {
+                          "source": {
+                            "type": "DelimitedTextSource",
+                            "formatSettings": {
+                              "type": "DelimitedTextReadSettings"
+                            },
+                            "storeSettings": {
+                              "type": "HttpReadSettings",
+                              "requestMethod": "GET"
+                            },
+                            "datasetSettings": {
+                              "type": "DelimitedText",
+                              "typeProperties": {
+                                "location": {
+                                  "type": "HttpServerLocation",
+                                  "relativeUrl": {
+                                    "value": "@concat(     item().SOURCE_PATH,     '/',     item().SOURCE_OBJECT )",
+                                    "type": "Expression"
+                                  }
+                                },
+                                "columnDelimiter": ",",
+                                "quoteChar": "\"",
+                                "escapeChar": "\\",
+                                "firstRowAsHeader": true
+                              },
+                              "schema": [],
+                              "externalReferences": {
+                                "connection": "1b1a814c-98b5-438b-98c9-b825d05829e6"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "sink": {
+                            "type": "ParquetSink",
+                            "formatSettings": {
+                              "type": "ParquetWriteSettings",
+                              "enableVertiParquet": true
+                            },
+                            "storeSettings": {
+                              "type": "AzureBlobStorageWriteSettings",
+                              "copyBehavior": "FlattenHierarchy"
+                            },
+                            "datasetSettings": {
+                              "type": "Parquet",
+                              "typeProperties": {
+                                "location": {
+                                  "type": "LakehouseLocation",
+                                  "folderPath": {
+                                    "value": "@concat( item().TARGET_PATH, '/', formatDateTime(utcNow(),'yyyy'), '/', formatDateTime(utcNow(),'MM'), '/', formatDateTime(utcNow(),'dd') )",
+                                    "type": "Expression"
+                                  }
+                                },
+                                "compressionCodec": "snappy"
+                              },
+                              "schema": [],
+                              "linkedService": {
+                                "name": "LH_PHARMA",
+                                "properties": {
+                                  "type": "Lakehouse",
+                                  "typeProperties": {
+                                    "artifactId": "43f53674-f141-b910-4f7a-12397f3feb17",
+                                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                    "rootFolder": "Files"
+                                  },
+                                  "annotations": []
+                                }
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "translator": {
+                            "type": "TabularTranslator",
+                            "typeConversion": true,
+                            "typeConversionSettings": {
+                              "allowDataTruncation": true,
+                              "treatBooleanAsNumber": false
+                            }
+                          },
+                          "enableStaging": false
+                        },
+                        "policy": {
+                          "timeout": "0.12:00:00",
+                          "retry": 0,
+                          "retryIntervalInSeconds": 30,
+                          "secureInput": false,
+                          "secureOutput": false
+                        },
+                        "name": "CPY_GITHUB",
+                        "dependsOn": []
+                      }
+                    ]
+                  }
+                ],
+                "defaultActivities": [
+                  {
+                    "type": "Fail",
+                    "typeProperties": {
+                      "message": "Unsupported Source Object",
+                      "errorCode": "403"
+                    },
+                    "name": "Fail_SourceUnsupported",
+                    "dependsOn": []
+                  }
+                ]
+              },
+              "name": "SW_SOURCE_SYSTEM",
+              "description": "Routes execution based on SOURCE_SYSTEM.",
+              "dependsOn": []
+            },
+            {
+              "type": "Script",
+              "typeProperties": {
+                "scripts": [
+                  {
+                    "text": {
+                      "value": "UPDATE CTL.CTL_INTEGRATION_METADATA\nSET\nLAST_EXECUTION_DATE=GETDATE(),\nSESSION_CDC_EXTRACT_DT=\nCASE\nWHEN CDC_FLAG='Y'\nTHEN DATEADD(DAY,-PRUNE_DAYS,GETDATE())\nELSE SESSION_CDC_EXTRACT_DT\nEND,\nUPDATED_BY='SYSTEM',\nUPDATED_DT=GETDATE()\nWHERE INTEGRATION_ID=@{item().METADATA_ID};",
+                      "type": "Expression"
+                    },
+                    "type": "NonQuery"
+                  }
+                ],
+                "scriptBlockExecutionTimeout": "02:00:00"
+              },
+              "linkedService": {
+                "name": "WH_PHARMA",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "c985e5b1-e4ce-b1ec-4c29-6e14a5b47622",
+                    "endpoint": "gpmxth5ok7tu5gsvuhyulctvgu-cmbwkftkhcruzde6746kfmcpnu.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "annotations": []
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "SCR_UPDATE_WATERMARK",
+              "dependsOn": [
+                {
+                  "activity": "SW_SOURCE_SYSTEM",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "name": "FE_SOURCE_OBJECTS",
+        "description": "Iterates through each metadata record.",
+        "dependsOn": [
+          {
+            "activity": "LKP_INTEGRATION_METADATA",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

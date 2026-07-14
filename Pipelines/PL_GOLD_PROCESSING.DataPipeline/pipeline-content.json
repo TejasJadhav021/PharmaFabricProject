@@ -1,0 +1,140 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "sqlReaderQuery": "SELECT *\nFROM CTL.CTL_INTEGRATION_METADATA\nWHERE ACTIVE_FLG='Y'\nAND GOLD_TABLE IS NOT NULL\nAND CDC_FLAG='Y'\nORDER BY EXECUTION_ORDER;",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00"
+          },
+          "datasetSettings": {
+            "type": "DataWarehouseTable",
+            "schema": [],
+            "linkedService": {
+              "name": "WH_PHARMA",
+              "properties": {
+                "type": "DataWarehouse",
+                "typeProperties": {
+                  "artifactId": "c985e5b1-e4ce-b1ec-4c29-6e14a5b47622",
+                  "endpoint": "gpmxth5ok7tu5gsvuhyulctvgu-cmbwkftkhcruzde6746kfmcpnu.datawarehouse.fabric.microsoft.com",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "LKP_GOLD_TABLES",
+        "dependsOn": []
+      },
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "isSequential": true,
+          "items": {
+            "value": "@activity('LKP_GOLD_TABLES').output.value",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "1e2ba9d5-df49-ba4e-46ef-29daae5d4f3a",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "METADATA_ID": {
+                    "value": {
+                      "value": "@item().METADATA_ID",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "PIPELINE_RUN_ID": {
+                    "value": {
+                      "value": "@pipeline().RunId",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "NB_SILVER_TO_GOLD",
+              "dependsOn": []
+            },
+            {
+              "type": "Script",
+              "typeProperties": {
+                "scripts": [
+                  {
+                    "text": {
+                      "value": "@{concat(\n'UPDATE CTL.CTL_INTEGRATION_METADATA\nSET UPDATED_DT = CURRENT_TIMESTAMP\nWHERE GOLD_TABLE = ''',\nitem().GOLD_TABLE,\n''';'\n)}",
+                      "type": "Expression"
+                    },
+                    "type": "NonQuery"
+                  }
+                ],
+                "scriptBlockExecutionTimeout": "02:00:00"
+              },
+              "linkedService": {
+                "name": "WH_PHARMA",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "c985e5b1-e4ce-b1ec-4c29-6e14a5b47622",
+                    "endpoint": "gpmxth5ok7tu5gsvuhyulctvgu-cmbwkftkhcruzde6746kfmcpnu.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "annotations": []
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "SCR_UPDATE_METADATA",
+              "dependsOn": [
+                {
+                  "activity": "NB_SILVER_TO_GOLD",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "name": "FE_PROCESS_TABLES",
+        "dependsOn": [
+          {
+            "activity": "LKP_GOLD_TABLES",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

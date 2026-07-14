@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Reflex",
+    "displayName": "PHARMA_ACTIVATOR"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "4ba3e221-3274-97de-443f-3cc6a4dbaa13"
+  }
+}

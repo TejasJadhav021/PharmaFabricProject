@@ -1,0 +1,236 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {},
+          "waitOnCompletion": true,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "48423eb7-4f9e-b58e-4db6-33060910c21d",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "cbbf17f5-1f80-418f-b51d-33247d76cc71"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "EP_SOURCE_TO_BRONZE",
+        "description": "Executes the Bronze Ingestion child pipeline responsible for loading data from all source systems into the Bronze layer using metadata-driven ingestion.",
+        "dependsOn": []
+      },
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {},
+          "waitOnCompletion": true,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "e37ae981-8411-a9c5-4637-f493f63221b2",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "cbbf17f5-1f80-418f-b51d-33247d76cc71"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "EP_BRONZE_TO_SILVER",
+        "description": "Executes the Silver transformation pipeline to cleanse, standardize, validate, and enrich Bronze data before loading it into the Silver layer.",
+        "dependsOn": [
+          {
+            "activity": "EP_SOURCE_TO_BRONZE",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {},
+          "waitOnCompletion": true,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "b0f096c9-8c0d-b528-4db2-ddd2389d2c80",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "cbbf17f5-1f80-418f-b51d-33247d76cc71"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "EP_SILVER_TO_GOLD",
+        "description": "Executes the Gold processing pipeline to apply business transformations, merge data into Gold Lakehouse tables, and prepare datasets for analytics and reporting.",
+        "dependsOn": [
+          {
+            "activity": "EP_BRONZE_TO_SILVER",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "@concat(\n\n'<h2 style=\"color:red\">Microsoft Fabric Pipeline Failure</h2>',\n\n'<br><b>Master Pipeline :</b> ',\npipeline().Pipeline,\n\n'<br><br><b>Run ID :</b> ',\npipeline().RunId,\n\n'<br><br><b>Execution Time :</b> ',\nutcNow(),\n\n'<br><br><b>Status :</b> FAILED',\n\n'<br><br>Please review the failed child pipeline in Microsoft Fabric Monitor.'\n\n)",
+          "to": "Tejas.J@data-phi.ai",
+          "subject": {
+            "value": "@concat(\n'❌ Pipeline Failed - ',\npipeline().Pipeline\n)",
+            "type": "Expression"
+          }
+        },
+        "externalReferences": {
+          "connection": "12ee6470-8d47-4362-8121-a51c5bff6a43"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "EMAIL_BRONZE_FAILED",
+        "description": "Sends an email notification whenever any child pipeline in the master orchestration fails.",
+        "dependsOn": [
+          {
+            "activity": "EP_SOURCE_TO_BRONZE",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "@concat(\n\n'<h2 style=\"color:red;\">Silver Pipeline Failed</h2>',\n\n'<br><br><b>Master Pipeline :</b> ',\npipeline().Pipeline,\n\n'<br><br><b>Failed Child Pipeline :</b> PL_SILVER_PROCESSING',\n\n'<br><br><b>Run ID :</b> ',\npipeline().RunId,\n\n'<br><br><b>Status :</b> FAILED',\n\n'<br><br><b>Execution Time :</b> ',\nutcNow(),\n\n'<br><br>Please review Microsoft Fabric Monitor.'\n\n)",
+          "to": "Tejas.J@data-phi.ai",
+          "subject": {
+            "value": "@concat(\n'🚨 SILVER PROCESSING FAILED | ',\npipeline().Pipeline\n)",
+            "type": "Expression"
+          }
+        },
+        "externalReferences": {
+          "connection": "12ee6470-8d47-4362-8121-a51c5bff6a43"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "EMAIL_SILVER_FAILED",
+        "description": "Sends email notification when Silver Processing pipeline fails.",
+        "dependsOn": [
+          {
+            "activity": "EP_BRONZE_TO_SILVER",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "@concat(\n\n'<h2 style=\"color:red;\">Gold Pipeline Failed</h2>',\n\n'<br><br><b>Master Pipeline :</b> ',\npipeline().Pipeline,\n\n'<br><br><b>Failed Child Pipeline :</b> PL_GOLD_PROCESSING',\n\n'<br><br><b>Run ID :</b> ',\npipeline().RunId,\n\n'<br><br><b>Status :</b> FAILED',\n\n'<br><br><b>Execution Time :</b> ',\nutcNow(),\n\n'<br><br>Please review Microsoft Fabric Monitor.'\n\n)",
+          "to": "Tejas.J@data-phi.ai",
+          "subject": "@concat( '🚨 GOLD PROCESSING FAILED | ', pipeline().Pipeline )"
+        },
+        "externalReferences": {
+          "connection": "12ee6470-8d47-4362-8121-a51c5bff6a43"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "EMAIL_GOLD_FAILED",
+        "description": "Sends email notification when Gold Processing pipeline fails.",
+        "dependsOn": [
+          {
+            "activity": "EP_SILVER_TO_GOLD",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Email",
+        "typeProperties": {
+          "body": "@concat(\n\n'<h2 style=\"color:green;\">Pipeline Execution Successful</h2>',\n\n'<br><br><b>Master Pipeline :</b> ',\npipeline().Pipeline,\n\n'<br><br><b>Run ID :</b> ',\npipeline().RunId,\n\n'<br><br><b>Status :</b> SUCCESS',\n\n'<br><br><b>Completion Time :</b> ',\nutcNow(),\n\n'<br><br><b>Executed Pipelines :</b>',\n\n'<br>✔ Bronze Ingestion',\n\n'<br>✔ Bronze to Silver',\n\n'<br>✔ Gold Processing',\n\n'<br><br>All pipelines executed successfully.',\n\n'<br><br>Gold tables are refreshed and ready for reporting.'\n\n)",
+          "to": "Tejas.J@data-phi.ai",
+          "subject": {
+            "value": "@concat(\n'✅ Pharma ETL Pipeline Completed Successfully | ',\npipeline().Pipeline\n)",
+            "type": "Expression"
+          }
+        },
+        "externalReferences": {
+          "connection": "12ee6470-8d47-4362-8121-a51c5bff6a43"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "EMAIL_SUCCESS",
+        "description": "Sends email notification when Gold Processing pipeline fails.",
+        "dependsOn": [
+          {
+            "activity": "DF_DIM_DATE",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "RefreshDataflow",
+        "typeProperties": {
+          "dataflowId": "a6c4ca07-c973-bb2c-44c7-0eafe17e19ad",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "notifyOption": "NoNotification",
+          "dataflowType": "DataflowFabric",
+          "executeMashupQueriesOnly": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "DF_DIM_DATE",
+        "dependsOn": [
+          {
+            "activity": "EP_SILVER_TO_GOLD",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

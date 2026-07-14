@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "LH_PHARMA"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "43f53674-f141-b910-4f7a-12397f3feb17"
+  }
+}

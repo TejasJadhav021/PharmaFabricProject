@@ -1,0 +1,52 @@
+[
+  {
+    "uniqueIdentifier": "07b8e816-e726-4795-a2ff-c699466206d6",
+    "payload": {
+      "name": "LH_PHARMA",
+      "description": "Container Description",
+      "type": "sqlQueries"
+    },
+    "type": "container-v1"
+  },
+  {
+    "uniqueIdentifier": "865f1f8e-1f7e-4b3b-be5c-cae8f8db029a",
+    "payload": {
+      "name": "LH_PHARMA event",
+      "runSettings": {
+        "executionIntervalInSeconds": 10800
+      },
+      "query": {
+        "queryString": "SELECT\r\n    MAX(LOAD_TIMESTAMP) AS LAST_LOAD_TIME,\r\n    DATEDIFF(HOUR, MAX(LOAD_TIMESTAMP), GETDATE()) AS HOURS_SINCE_LAST_LOAD\r\nFROM fact_sales;"
+      },
+      "connection": {
+        "itemId": "db45a0a7-5bd0-4d40-9903-12e1b4643812",
+        "workspaceId": "16650313-386a-4ca3-8c9e-ff3ca2b04f6d",
+        "itemType": "SqlAnalyticsEndpoint"
+      },
+      "queryParameters": [],
+      "metadata": {
+        "workspaceId": "16650313-386a-4ca3-8c9e-ff3ca2b04f6d",
+        "artifactId": "db45a0a7-5bd0-4d40-9903-12e1b4643812",
+        "deeplinkParam": "selectedNodePath=db45a0a7-5bd0-4d40-9903-12e1b4643812/Queries/MyQueries/39498&selectedNodeDisplayValue=Load_Freshdata_Monitor"
+      },
+      "parentContainer": {
+        "targetUniqueIdentifier": "07b8e816-e726-4795-a2ff-c699466206d6"
+      }
+    },
+    "type": "sqlSource-v1"
+  },
+  {
+    "uniqueIdentifier": "0622a994-a58f-4349-96d8-6a1e5b8ca265",
+    "payload": {
+      "name": "LH_PHARMA event",
+      "parentContainer": {
+        "targetUniqueIdentifier": "07b8e816-e726-4795-a2ff-c699466206d6"
+      },
+      "definition": {
+        "type": "Event",
+        "instance": "{\"steps\":[{\"id\":\"2a94a9bf-8765-47bd-a06c-59f315d65242\",\"name\":\"SourceEventStep\",\"rows\":[{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"865f1f8e-1f7e-4b3b-be5c-cae8f8db029a\"}],\"kind\":\"SourceReference\",\"name\":\"SourceSelector\"}]}],\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.2.6\"}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  }
+]

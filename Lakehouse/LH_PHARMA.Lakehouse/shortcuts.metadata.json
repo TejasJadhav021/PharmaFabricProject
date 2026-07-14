@@ -1,0 +1,15 @@
+[
+  {
+    "name": "CTL",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/CTL",
+        "itemId": "c985e5b1-e4ce-b1ec-4c29-6e14a5b47622",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Warehouse"
+      }
+    }
+  }
+]
