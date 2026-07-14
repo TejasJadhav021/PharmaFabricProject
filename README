@@ -1,1 +1,169 @@
+# 💊 Pharma Data Engineering Platform using Microsoft Fabric
 
+An end-to-end Data Engineering project built using Microsoft Fabric to demonstrate enterprise-style data ingestion, transformation, analytics, and reporting for the pharmaceutical domain.
+
+---
+
+## 📌 Project Overview
+
+This project simulates a real-world pharmaceutical analytics platform where data from multiple sources is ingested, transformed, and analyzed using Microsoft Fabric.
+
+The solution follows the Medallion Architecture (Bronze, Silver, Gold) to ensure scalable, reliable, and high-quality data processing.
+
+---
+
+## 🎯 Objectives
+
+- Build an end-to-end data engineering solution using Microsoft Fabric.
+- Implement Medallion Architecture.
+- Perform data cleaning and transformation using Spark Notebooks.
+- Store curated data for reporting.
+- Create interactive Power BI dashboards.
+- Maintain project source code using Git Integration.
+
+---
+
+## 🛠 Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| Microsoft Fabric | Unified Analytics Platform |
+| OneLake | Data Storage |
+| Lakehouse | Raw & Curated Storage |
+| Data Pipelines | Data Ingestion |
+| Spark Notebooks | Data Transformation |
+| SQL Warehouse | Analytics |
+| Power BI | Dashboard & Visualization |
+| GitHub | Version Control |
+
+---
+
+## 🏗 Architecture
+
+```
+Source Systems
+      │
+      ▼
+Data Pipeline
+      │
+      ▼
+Bronze Layer
+      │
+      ▼
+Silver Layer
+      │
+      ▼
+Gold Layer
+      │
+      ▼
+Warehouse
+      │
+      ▼
+Power BI Dashboard
+```
+
+---
+
+## 📂 Project Workflow
+
+### Data Ingestion
+
+- Ingest pharmaceutical datasets into OneLake
+- Store raw data in Bronze Layer
+
+### Data Transformation
+
+- Data cleansing
+- Remove duplicates
+- Handle null values
+- Data type conversion
+- Business rule implementation
+
+### Data Modeling
+
+Create analytical tables for reporting.
+
+### Reporting
+
+Power BI dashboards provide KPIs such as
+
+- Total Sales
+- Revenue
+- Orders
+- Product Performance
+- Regional Analysis
+- Monthly Trends
+
+---
+
+## 📁 Repository Structure
+
+```
+docs/
+notebooks/
+pipelines/
+lakehouse/
+warehouse/
+reports/
+```
+
+---
+
+## ⭐ Features
+
+- End-to-End ETL Pipeline
+- Medallion Architecture
+- Spark Data Transformation
+- Lakehouse Storage
+- SQL Warehouse
+- Interactive Power BI Dashboard
+- Git Version Control
+- Microsoft Fabric Workspace
+
+---
+
+## 📊 Key Components
+
+- Data Pipeline
+- Lakehouse
+- Spark Notebook
+- SQL Warehouse
+- Semantic Model
+- Power BI Dashboard
+
+---
+
+## 🚀 Future Enhancements
+
+- Incremental Data Loading
+- Data Quality Validation
+- Automated Monitoring
+- Deployment Pipelines
+- CI/CD using Azure DevOps
+- Microsoft Purview Integration
+
+---
+
+## 📸 Project Screenshots
+
+| Component | Screenshot |
+|-----------|------------|
+| Architecture | docs/Architecture.png |
+| Pipeline | docs/Screenshots/Pipeline.png |
+| Notebook | docs/Screenshots/Notebook.png |
+| Lakehouse | docs/Screenshots/Lakehouse.png |
+| Dashboard | docs/Screenshots/Dashboard.png |
+
+---
+
+## 👨‍💻 Author
+
+**Tejas Jadhav**
+
+Data Engineer
+
+GitHub: https://github.com/TejasJadhav021
+
+---
+
+## ⭐ If you found this project helpful, consider giving it a Star.
